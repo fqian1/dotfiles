@@ -1,9 +1,13 @@
 #!/bin/bash
 
-# Symlink kitty configuration
-ln -sf ~/dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
+# Define the base directory of your dotfiles
+DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Symlink hyprland configuration
-ln -sf ~/dotfiles/hyprland/hyprland.conf ~/.config/hyprland/hyprland.conf
+# Create symlinks for each config directory
+ln -sfn "$DOTFILES_DIR/hypr" ~/.config/hypr
+ln -sfn "$DOTFILES_DIR/kitty" ~/.config/kitty
+ln -sfn "$DOTFILES_DIR/nvim" ~/.config/nvim
+ln -sfn "$DOTFILES_DIR/waybar" ~/.config/waybar
 
-echo "Dotfiles have been symlinked!"
+# Print a success message
+echo "Symlinks created successfully."
