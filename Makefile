@@ -11,7 +11,7 @@ system: ${SYSTEM_OBJS}
 
 ${HOME_OBJS}:
 	@mkdir -p ${.TARGET:H}
-	ln -sf ${.TARGET:C/^${HOME}/home/:tA} ${.TARGET}
+	ln -sf ${.CURDIR}/home/${.TARGET:C/^home\///} ${.TARGET}
 
 ${SYSTEM_OBJS}:
 	@mkdir -p ${.TARGET:H}
