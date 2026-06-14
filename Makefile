@@ -1,6 +1,8 @@
 HOME_FILES != find home -type f
 SYSTEM_FILES != find system -type f
 
+.PHONY home system
+
 .for file in ${HOME_FILES}
 TARGET_PATH = ${HOME}/${file:C/^home\///}
 home: ${TARGET_PATH}
@@ -9,7 +11,7 @@ ${TARGET_PATH}: ${file}
 	ln -sf ${.ALLSRC:tA} ${.TARGET}
 .endfor
 
-.for file in ${SYTEM_FILES}
+.for file in ${SYSTEM_FILES}
 TARGET_PATH = /${file:C/^system\///}
 system: ${TARGET_PATH}
 ${TARGET_PATH}: ${file}
