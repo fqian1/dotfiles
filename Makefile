@@ -2,7 +2,7 @@ HOME_SRC != find home -type f
 SYSTEM_SRC != find system -type f
 
 HOME_OBJS = ${HOME_SRC:C/^home\//${HOME}\//}
-SYSTEM_OBJS = ${SYSTEM_SRC:C/^system\//}
+SYSTEM_OBJS = ${SYSTEM_SRC:C/^system\///}
 
 .PHONY: all home system
 all: home system
