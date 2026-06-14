@@ -1,22 +1,21 @@
-HOME_FILES != find home -type f
-SYSTEM_FILES != find system -type f
+HOME_SRC != find home -type f
+SYSTEM_SRC != find system -type f
 
-.PHONY home system
+HOME_OBJS = ${HOME_SRC:C/^home\//${HOME}\//}
+SYSTEM_OBJS = ${SYSTEM_SRC:C/^system\//\//}
 
-.for file in ${HOME_FILES}
-TARGET_PATH = ${HOME}/${file:C/^home\///}
-home: ${TARGET_PATH}
-${TARGET_PATH}: ${file}
+.PHONY: all home system
+all: home system
+home: ${HOME_OBJS}
+system: ${SYSTEM_OBJS}
+
+${HOME_OBJS}:
 	@mkdir -p ${.TARGET:H}
-	ln -sf ${.ALLSRC:tA} ${.TARGET}
-.endfor
+	ln -sf ${.TARGET:C/^${HOME}/home/:tA} ${.TARGET}
 
-.for file in ${SYSTEM_FILES}
-TARGET_PATH = /${file:C/^system\///}
-system: ${TARGET_PATH}
-${TARGET_PATH}: ${file}
+${SYSTEM_OBJS}:
 	@mkdir -p ${.TARGET:H}
-	cp ${.ALLSRC} ${.TARGET}
+	cp system${.TARGET} ${.TARGET}
 	chown root:wheel ${.TARGET}
 	chmod 0644 ${.TARGET}
-.endfor
+
