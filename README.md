@@ -1,6 +1,7 @@
 ```
 .
 ├── Makefile
+├── README.md
 ├── home
 │   ├── .config
 │   │   ├── git
@@ -10,14 +11,17 @@
 │   │       └── rc
 │   ├── .login_conf
 │   ├── .profile
-│   └── .ssh
+│   ├── .shrc
+│   └── .ssh/ #todo age encryption
 └── system
     ├── etc
     │   └── rc.conf
-    ├── my.kbd # wheres this go
-    ├── set-shell.sh
     └── usr
-        └── local
-            └── etc
-                └── doas.conf
+        ├── local
+        │   └── etc
+        │       └── doas.conf
+        └── share
+            └── vt
+                └── keymaps
+                    └── my.kbd
 ```
