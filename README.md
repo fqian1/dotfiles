@@ -1,18 +1,19 @@
 ```
 .
 ├── Makefile
-├── README.md
 ├── home
 │   ├── .config
 │   │   ├── git
 │   │   │   └── config
-│   │   ├── private_user-dirs.dirs
+│   │   ├── tmux
+│   │   │   └── tmux.conf
+│   │   ├── user-dirs.dirs
 │   │   └── yash
 │   │       └── rc
 │   ├── .login_conf
 │   ├── .profile
 │   ├── .shrc
-│   └── .ssh/ #todo age encryption
+│   └── .ssh
 └── system
     ├── etc
     │   └── rc.conf
