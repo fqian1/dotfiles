@@ -52,11 +52,5 @@ PS1="\u@\h:\w \\$ "
 # CDPATH=:$HOME
 
 # ------------------------
-SHELL_PATH="/usr/local/bin/yash"
-
-if [ -z "$YASH_VERSION" ] && [ -x "$SHELL_PATH" ]; then
-    export SHELL="$SHELL_PATH"
-    exec "$SHELL_PATH" -l
-fi
 
 # vim: set et sw=2 sts=2 tw=78 ft=sh:
