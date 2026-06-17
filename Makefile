@@ -8,6 +8,19 @@ all: home system
 home: ${HOME_OBJS}
 system: ${SYSTEM_OBJS}
 
+${HOME}/.login_conf: home/.login_conf
+	cp home/.login_conf $@
+	chmod 0644 $@
+	chown ${USER}:wheel $@
+
+/usr/local/etc/doas.conf: system/usr/local/etc/doas.conf
+	@mkdir -p ${@:H}
+	@[ ! -e $@ ] || mv $@ $@.bak
+	cp system$@ $@
+	chmod 0400 $@
+	chown root:wheel $@
+	
+
 ${HOME_OBJS}: ${@:S|${HOME}/|${.CURDIR}/home/|}
 	@mkdir -p ${@:H}
 	@[ ! -e $@ ] || mv $@ $@.bak
