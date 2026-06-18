@@ -42,24 +42,17 @@ set -o vi
 
 FASTFETCH_FLAG="/tmp/fastfetch_ran"
 if [ ! -f "$FASTFETCH_FLAG" ]; then
+  clear
   fastfetch
   touch "$FASTFETCH_FLAG"
 fi
-
-suspend() {
-  stopped_count=$(jobs -s | wc -l)
-  if [ "$stopped_count" -gt "${_prev_stopped_count:-0}" ]; then
-    tput cuu 1
-    tput el
-    tput cud 1
-  fi
-  _prev_stopped_count=$stopped_count
-}
 
 alias sudo="doas"
 #alias port="cat /var/run/protonvpn-forwarded-port"
 alias tree="tree -F --dirsfirst"
 alias ls="ls -lFG"
+
+
 
 #TODO: pwd in PS1 (print cwd, trim if long, replace $HOME with ~)
 #TODO: find git status, replace with git symbols)

@@ -7,6 +7,18 @@ SYSTEM_OBJS = ${SYSTEM_SRC:S|^system/|/|}
 all: home system
 home: ${HOME_OBJS}
 system: ${SYSTEM_OBJS}
+	
+${HOME_OBJS}: ${@:S|${HOME}/|${.CURDIR}/home/|}
+	@mkdir -p ${@:H}
+	@[ ! -e $@ ] || mv $@ $@.bak
+	ln -sf ${.CURDIR}/home/${@:S|${HOME}/||} $@
+
+${SYSTEM_OBJS}: ${@:S|/|system/|}
+	@mkdir -p ${@:H}
+	@[ ! -e $@ ] || mv $@ $@.bak
+	cp ${.CURDIR}/system$@ $@
+	chmod 0644 $@
+	chown root:wheel $@
 
 ${HOME}/.login_conf: home/.login_conf
 	cp home/.login_conf $@
@@ -18,19 +30,6 @@ ${HOME}/.login_conf: home/.login_conf
 	@[ ! -e $@ ] || mv $@ $@.bak
 	cp system$@ $@
 	chmod 0400 $@
-	chown root:wheel $@
-	
-
-${HOME_OBJS}: ${@:S|${HOME}/|${.CURDIR}/home/|}
-	@mkdir -p ${@:H}
-	@[ ! -e $@ ] || mv $@ $@.bak
-	ln -sf ${.CURDIR}/home/${@:S|${HOME}/||} $@
-
-${SYSTEM_OBJS}: ${@:S|/|system/|}
-	@mkdir -p ${@:H}
-	@[ ! -e $@ ] || mv $@ $@.bak
-	cp ${.CURDIR}/system$@ $@
-	chmod 0644 $@
 	chown root:wheel $@
 
 .PHONY: clean restore
