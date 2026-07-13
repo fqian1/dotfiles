@@ -1,24 +1,12 @@
-# common configuration:
-# enable bash-like extended expansion
-set --brace-expand
-
-# enable recursive pathname expansion
-set --extended-glob
-
-# prevent redirections from overwriting existing files
-set --no-clobber
-
-# don't implicitly expand non-existent variables to empty strings
-set --no-unset
+set --brace-expand # enable bash-like extended expansion
+set --extended-glob # enable recursive pathname expansion
+set --no-clobber # prevent redirections from overwriting existing files
+set --no-unset # don't implicitly expand non-existent variables to empty strings
 
 # if yash is built with command history enabled...
 if command --identify --builtin-command history >/dev/null; then
-
-  # don't save commands starting with a space in history
-  set --hist-space
-
-  # prevent clearing history by accident
-  history()
+  set --hist-space  # don't save commands starting with a space in history
+  history()         # prevent clearing history by accident
   if [ -t 0 ] && (
     for arg do
       case "${arg}" in
@@ -37,22 +25,13 @@ if command --identify --builtin-command history >/dev/null; then
   else
     command history "$@"
   fi
-
 fi
 
 # if yash is built with line-editing enabled...
 if command --identify --builtin-command bindkey >/dev/null; then
-
-  # print job status update ASAP, but only while line-editing
-  set --notify-le
-
-  # some terminfo data are broken; meta flags have to be ignored for UTF-8
-  set --le-no-conv-meta
-
-  # enable command line prediction
-  set --le-predict
-
-  # key bindings for vi mode, some of which are from emacs mode
+  set --notify-le  # print job status update ASAP, but only while line-editing
+  set --le-no-conv-meta  # some terminfo data are broken; meta flags have to be ignored for UTF-8
+  set --le-predict  # enable command line prediction
   bindkey --vi-insert '\^A' beginning-of-line
   bindkey --vi-insert '\^B' backward-char
   bindkey --vi-insert '\^D' eof-or-delete
@@ -71,7 +50,6 @@ if command --identify --builtin-command bindkey >/dev/null; then
   bindkey --vi-insert '\P' complete-prev-column
   bindkey --vi-command '\^N' beginning-search-forward
   bindkey --vi-command '\^P' beginning-search-backward
-
 fi
 
 # avoid removing/overwriting existing files by accident
@@ -79,12 +57,7 @@ cp() if [ -t 0 ]; then command cp -i "$@"; else command cp "$@"; fi
 mv() if [ -t 0 ]; then command mv -i "$@"; else command mv "$@"; fi
 rm() if [ -t 0 ]; then command rm -i "$@"; else command rm "$@"; fi
 
-yash() { command yash "$@"; }
-# By re-defining 'yash' using the 'command' built-in, the 'jobs' built-in
-# prints a command name that exposes the arguments like
-# 'yash --posix -n foo.sh' rather than a command name that hides the
-# arguments like 'yash --posix "${@}"'. This applies to the 'yash' command
-# invoked via the 'sh' function.
+yash() { command yash "$@"; } # Improve 'jobs' output
 
 # ensure job control works as expected
 case $- in (*m*)
@@ -110,12 +83,10 @@ fi
 
 # if vim is available...
 if command --identify vim >/dev/null 2>&1; then
-
   # prefer vim over vi
   vi() { vim "$@"; }
   view() { vim -R "$@"; }
   vim() { command vim "$@"; } # Re-definition hack. See above.
-
 fi
 
 # avoid removing existing crontab by accident
@@ -141,12 +112,9 @@ fi
 # define some basic variables if missing
 : ${PAGER:=less} ${EDITOR:=vi} ${FCEDIT:=${VISUAL:=$EDITOR}}
 : ${LOGNAME:=$(logname)} ${HOSTNAME:=$(uname -n)}
-
-# disable confusing treatment of arguments in the echo command
 : ${ECHO_STYLE:=RAW}
 
 # variables needed for command history
-
 if ! [ "${HISTFILE-}" ]; then
     HISTFILE=${XDG_STATE_HOME:-~/.local/state}/yash/history
 
@@ -163,18 +131,7 @@ fi
 
 HISTSIZE=5000
 
-# HISTRMDUP makes prediction less accurate
-# HISTRMDUP=500
-
-# default mail check interval is too long
-MAILCHECK=0
-
-# emulate bash's $SHLVL
-if [ "${_old_shlvl+set}" != set ]; then
-  _old_shlvl=${SHLVL-}
-fi
-SHLVL=$((_old_shlvl+1)) 2>/dev/null || SHLVL=1
-export SHLVL
+MAILCHECK=0  # default mail check interval is too long
 
 # initialize event handlers
 COMMAND_NOT_FOUND_HANDLER=()
@@ -182,7 +139,6 @@ PROMPT_COMMAND=()
 POST_PROMPT_COMMAND=()
 YASH_AFTER_CD=()
 
-# define prompt
 if [ -n "${SSH_CONNECTION-}" ]; then
   _hc='\fy.'     # yellow hostname for SSH remote
 else
@@ -195,9 +151,29 @@ else
   _uc=$_hc _hc=  # same username color as hostname for non-root user
   _2c=           # PS2 in normal color for non-root user
 fi
-# The main prompt ($YASH_PS1) contains the username, hostname, working
-# directory, last exit status (only if non-zero), and $SHLVL (only if
-# non-one).
+
+# emulate bash's $SHLVL
+if [ "${_old_shlvl+set}" != set ]; then
+  _old_shlvl=${SHLVL-}
+fi
+SHLVL=$((_old_shlvl+1)) 2>/dev/null || SHLVL=1
+export SHLVL
+
+#function cwd_prompt {
+#  local dir="${PWD##*/}"
+#  local pdir_full="${PWD%/*}"
+#  local pdir="${pdir_full##*/}"
+#  local pdirt="${pdir:0:3}.."
+#  if [[ "$PWD" == "$HOME" ]]; then
+#    ble/prompt/print "~"
+#  elif [[ "$PWD" == "/" ]]; then
+#    ble/prompt/print "/"
+#  elif [[ "$pdir_full" == "$HOME" ]]; then
+#    ble/prompt/print "~/$dir" # Check if the full parent path is HOME
+#  else
+#    ble/prompt/print "$pdirt/$dir"
+#  fi
+#}
 
 YASH_PS1=$_uc'${LOGNAME}'$_hc'@${HOSTNAME%%.*}\fd. '\
 '${${${PWD:/~/\~}##*/}:-$PWD} ${{?:/0/}:+\\fr.$?\\fd. }${{SHLVL-0}:/1}\$ '
@@ -337,10 +313,36 @@ alias sudo="doas"
 alias tree="tree -F --dirsfirst"
 alias ls="ls -lFG"
 
-
+export PATH="$HOME/.local/bin:$PATH"
 
 #TODO: pwd in PS1 (print cwd, trim if long, replace $HOME with ~)
 #TODO: find git status, replace with git symbols)
+
+
+function handle_nvim_suspend() {
+    if jobs -s | grep -q "nvim"; then
+       if [ "$NVIM_SUSPENDED" != "true" ]; then
+            tput cuu 4
+            tput el
+            printf '\n'
+            printf '\r'
+            tput el
+            printf '\n'
+            printf '\r'
+            tput el
+            printf '\n'
+            printf '\r'
+            tput el
+            printf '\n'
+            printf '\r'
+            tput cuu 4
+            export NVIM_SUSPENDED="true"
+        fi
+    fi
+}
+
+alias fg='unset NVIM_SUSPENDED; command fg'
+
 
 # --------------------------------------
 # vim: set et sw=2 sts=2 tw=78 ft=sh:
