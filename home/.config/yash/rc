@@ -312,6 +312,7 @@ alias sudo="doas"
 #alias port="cat /var/run/protonvpn-forwarded-port"
 alias tree="tree -F --dirsfirst"
 alias ls="ls -lFG"
+alias vim="vise"
 
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -343,6 +344,24 @@ function handle_nvim_suspend() {
 
 alias fg='unset NVIM_SUSPENDED; command fg'
 
+tmuxa() {
+    selected_name=$(basename "$selected" | tr . _)
+
+    if [ -z "$TMUX" ]; then
+        if tmux has-session -t "$selected_name" 2>/dev/null; then
+            exec tmux attach-session -t "$selected_name"
+        else
+            exec tmux new-session -s "$selected_name" -c "$selected"
+        fi
+    else
+        if tmux has-session -t "$selected_name" 2>/dev/null; then
+            tmux switch-client -t "$selected_name"
+        else
+            tmux new-session -d -s "$selected_name" -c "$selected"
+            tmux switch-client -t "$selected_name"
+        fi
+    fi
+}
 
 # --------------------------------------
 # vim: set et sw=2 sts=2 tw=78 ft=sh:
