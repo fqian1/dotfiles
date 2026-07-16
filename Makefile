@@ -1,40 +1,61 @@
-HOME_SRC != find home -type f
+HOME_SRC   != find home -type f
 SYSTEM_SRC != find system -type f
 
-HOME_OBJS = ${HOME_SRC:S|^home/|${HOME}/|}
-SYSTEM_OBJS = ${SYSTEM_SRC:S|^system/|/|}
+HOME_EXCEPTIONS   = home/.login_conf
+SYSTEM_EXCEPTIONS = system/usr/local/etc/doas.conf \
+                    system/usr/local/etc/rc.d/tmux
+
+HOME_SRC_GENERIC   = ${HOME_SRC:N${HOME_EXCEPTIONS}}
+SYSTEM_SRC_GENERIC = ${SYSTEM_SRC:N${SYSTEM_EXCEPTIONS}}
+
+HOME_OBJS_GENERIC   = ${HOME_SRC_GENERIC:S|^home/|${HOME}/|}
+SYSTEM_OBJS_GENERIC = ${SYSTEM_SRC_GENERIC:S|^system/|/|}
+
+# ----- phony targets -----
+.PHONY: all home system require-root
 
 all: home system
+
 home: ${HOME_OBJS}
-system: ${SYSTEM_OBJS}
-	
-${HOME_OBJS}: ${@:S|${HOME}/|${.CURDIR}/home/|}
+	@echo "==> Home dotfiles installed"
+
+system: require-root ${SYSTEM_OBJS}
+	@echo "==> System files installed"
+
+require-root:
+	@[ $$(id -u) -eq 0 ] || { echo "Must be root to install system files."; exit 1; }
+
+# ----- generic home rule (symlink) -----
+${HOME_OBJS_GENERIC}: ${@:S|${HOME}/|${.CURDIR}/home/|}
 	@mkdir -p ${@:H}
 	@[ ! -e $@ ] || mv $@ $@.bak
 	ln -sf ${.CURDIR}/home/${@:S|${HOME}/||} $@
 
-${SYSTEM_OBJS}: ${@:S|/|system/|}
+# ----- generic system rule (copy) -----
+${SYSTEM_OBJS_GENERIC}: ${.CURDIR}/system$@
 	@mkdir -p ${@:H}
 	@[ ! -e $@ ] || mv $@ $@.bak
 	cp ${.CURDIR}/system$@ $@
 	chmod 0644 $@
 	chown root:wheel $@
 
-${HOME}/.login_conf: home/.login_conf
-	cp home/.login_conf $@
+# ----- specific overrides -----
+${HOME}/.login_conf: ${.CURDIR}/home/.login_conf
+	@mkdir -p ${@:H}
+	cp ${.CURDIR}/home/.login_conf $@
 	chmod 0644 $@
 	chown ${USER}:wheel $@
 
-/usr/local/etc/doas.conf: system/usr/local/etc/doas.conf
+/usr/local/etc/doas.conf: ${.CURDIR}/system/usr/local/etc/doas.conf
 	@mkdir -p ${@:H}
 	@[ ! -e $@ ] || mv $@ $@.bak
-	cp system$@ $@
+	cp ${.CURDIR}/system/usr/local/etc/doas.conf $@
 	chmod 0400 $@
 	chown root:wheel $@
 
-.PHONY: clean restore
-clean:
-	rm -f ${HOME_OBJS} ${SYSTEM_OBJS}
-
-restore:
-	@for f in ${HOME_OBJS} ${SYSTEM_OBJS}; do [ -f "$$f.bak" ] && mv "$$f.bak" "$$f"; done
+/usr/local/etc/rc.d/tmux: ${.CURDIR}/system/usr/local/etc/rc.d/tmux
+	@mkdir -p ${@:H}
+	@[ ! -e $@ ] || mv $@ $@.bak
+	cp ${.CURDIR}/system/usr/local/etc/rc.d/tmux $@
+	chmod 0755 $@
+	chown root:wheel $@

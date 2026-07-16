@@ -17,8 +17,8 @@ local plug = (function() if not pcall(require, 'plugins/vis-plug') then
 end return require('plugins/vis-plug') end)()
 
 local plugins = {
-	{ erf/vis-cursors },
-	{ ~mcepl/vis-fugitive },
+	{ 'erf/vis-cursors' },
+	{ '~mcepl/vis-fugitive' },
 }
 
-require('plugins/vis-plug').init(plugins, true)
+plug.init(plugins, true)
