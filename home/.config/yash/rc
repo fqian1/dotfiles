@@ -320,26 +320,33 @@ function handle_nvim_suspend() {
 alias fg='unset NVIM_SUSPENDED; command fg'
 
 tmuxa() {
-    selected_name=$(basename "$selected" | tr . _)
+	local selected_name
+	selected_name=$(basename "$selected" | tr . _)
 
-    if [ -z "$TMUX" ]; then
-        if tmux has-session -t "$selected_name" 2>/dev/null; then
-            exec tmux attach-session -t "$selected_name"
-        else
-            exec tmux new-session -s "$selected_name" -c "$selected"
-        fi
-    else
-        if tmux has-session -t "$selected_name" 2>/dev/null; then
-            tmux switch-client -t "$selected_name"
-        else
-            tmux new-session -d -s "$selected_name" -c "$selected"
-            tmux switch-client -t "$selected_name"
-        fi
-    fi
+	if [ -z "$TMUX" ]; then
+		if tmux has-session -t "$selected_name" 2>/dev/null; then
+			exec tmux attach-session -t "$selected_name"
+		else
+			exec tmux new-session -s "$selected_name" -c "$selected"
+		fi
+	else
+		if tmux has-session -t "$selected_name" 2>/dev/null; then
+			tmux switch-client -t "$selected_name"
+		else
+			tmux new-session -d -s "$selected_name" -c "$selected"
+			tmux switch-client -t "$selected_name"
+		fi
+	fi
 }
 
-fzedit() {
-	vise $(bfs -type f -size -10M | fzf)
+fedit() {
+	file=$(bfs "${1:-.}" -type f -exclude -name .git | fzf)
+	[ -n "$file" ] && vise "$file"
+}
+
+fcd() {
+	file=$(bfs "${1:-.}" -type f -exclude -name .git | fzf)
+	[ -n "$file" ] && cd "$file"
 }
 
 # --------------------------------------
