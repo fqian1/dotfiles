@@ -2,14 +2,27 @@ HOME_SRC   != find home -type f
 SYSTEM_SRC != find system -type f
 
 HOME_EXCEPTIONS   = home/.login_conf
+
 SYSTEM_EXCEPTIONS = system/usr/local/etc/doas.conf \
                     system/usr/local/etc/rc.d/tmux
 
-HOME_SRC_GENERIC   = ${HOME_SRC:N${HOME_EXCEPTIONS}}
-SYSTEM_SRC_GENERIC = ${SYSTEM_SRC:N${SYSTEM_EXCEPTIONS}}
+# ----- filter out exceptions -----
+HOME_SRC_GENERIC   = ${HOME_SRC}
+.for ex in ${HOME_EXCEPTIONS}
+HOME_SRC_GENERIC   := ${HOME_SRC_GENERIC:N${ex}}
+.endfor
+
+SYSTEM_SRC_GENERIC = ${SYSTEM_SRC}
+.for ex in ${SYSTEM_EXCEPTIONS}
+SYSTEM_SRC_GENERIC := ${SYSTEM_SRC_GENERIC:N${ex}}
+.endfor
 
 HOME_OBJS_GENERIC   = ${HOME_SRC_GENERIC:S|^home/|${HOME}/|}
 SYSTEM_OBJS_GENERIC = ${SYSTEM_SRC_GENERIC:S|^system/|/|}
+
+# full list of objects – generic + specific overrides
+HOME_OBJS   = ${HOME_OBJS_GENERIC} ${HOME}/.login_conf
+SYSTEM_OBJS = ${SYSTEM_OBJS_GENERIC} /usr/local/etc/doas.conf /usr/local/etc/rc.d/tmux
 
 # ----- phony targets -----
 .PHONY: all home system require-root
