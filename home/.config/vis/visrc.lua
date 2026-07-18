@@ -22,6 +22,7 @@ end
 local plugins = {
     { 'erf/vis-cursors' },
     { '~mcepl/vis-fugitive' },
+    { 'vis-quickfix' },
 }
 
 plug.init(plugins, false)
