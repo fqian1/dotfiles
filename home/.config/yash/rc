@@ -294,49 +294,39 @@ export PATH="$HOME/.local/bin:$PATH"
 #TODO: pwd in PS1 (print cwd, trim if long, replace $HOME with ~)
 #TODO: find git status, replace with git symbols)
 
-
-function handle_nvim_suspend() {
-    if jobs -s | grep -q "nvim"; then
-       if [ "$NVIM_SUSPENDED" != "true" ]; then
+function handle_job_suspend() {
+    if [ -n "$(jobs -s)" ]; then
+        if [ "${JOB_SUSPENDED:-}" != "true" ]; then
             tput cuu 4
-            tput el
-            printf '\n'
-            printf '\r'
-            tput el
-            printf '\n'
-            printf '\r'
-            tput el
-            printf '\n'
-            printf '\r'
-            tput el
-            printf '\n'
-            printf '\r'
-            tput cuu 4
-            export NVIM_SUSPENDED="true"
+            tput ed
+            export JOB_SUSPENDED="true"
         fi
+    else
+        unset JOB_SUSPENDED
     fi
 }
+alias fg='unset JOB_SUSPENDED; command fg'
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }handle_job_suspend"
 
-alias fg='unset NVIM_SUSPENDED; command fg'
+ftmux() {
+    dir=$( { printf "%s\n" "$HOME/dotfiles"; bfs "${1:-$HOME/projects}" -mindepth 1 -maxdepth 1 -type d; } | fzf )
+    [ -z "$dir" ] && return
+    name=$(basename "$dir" | tr . _)
 
-tmuxa() {
-	local selected_name
-	selected_name=$(basename "$selected" | tr . _)
-
-	if [ -z "$TMUX" ]; then
-		if tmux has-session -t "$selected_name" 2>/dev/null; then
-			exec tmux attach-session -t "$selected_name"
-		else
-			exec tmux new-session -s "$selected_name" -c "$selected"
-		fi
-	else
-		if tmux has-session -t "$selected_name" 2>/dev/null; then
-			tmux switch-client -t "$selected_name"
-		else
-			tmux new-session -d -s "$selected_name" -c "$selected"
-			tmux switch-client -t "$selected_name"
-		fi
-	fi
+    if [ -z "${TMUX:-}" ]; then
+        if tmux has-session -t "$name" 2>/dev/null; then
+            tmux attach-session -t "$name"
+        else
+            tmux new-session -s "$name" -c "$dir"
+        fi
+    else
+        if tmux has-session -t "$name" 2>/dev/null; then
+            tmux switch-client -t "$name"
+        else
+            tmux new-session -d -s "$name" -c "$dir"
+            tmux switch-client -t "$name"
+        fi
+    fi
 }
 
 fedit() {
@@ -345,8 +335,8 @@ fedit() {
 }
 
 fcd() {
-	file=$(bfs "${1:-.}" -type f -exclude -name .git | fzf)
-	[ -n "$file" ] && cd "$file"
+	dir=$(bfs "${1:-.}" -type d -exclude -name .git | fzf)
+	[ -n "$file" ] && cd "$dir"
 }
 
 # --------------------------------------
