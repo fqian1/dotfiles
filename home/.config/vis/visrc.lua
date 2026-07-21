@@ -21,8 +21,8 @@ end
 
 local plugins = {
     { 'erf/vis-cursors' },
-    { '~mcepl/vis-fugitive' },
-    { 'vis-quickfix' },
+    { 'https://git.sr.ht/~mcepl/vis-fugitive' },
+    { 'https://repo.or.cz/vis-quickfix.git' }, -- need vpn in uk
 }
 
 plug.init(plugins, false)
