@@ -1,0 +1,2 @@
+file=$(find "${1:-.}" -type f ! -path '*/.git*' | fzf)
+[ -n "$file" ] && vim "$file"

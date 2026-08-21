@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pkg install git doas curl wget fzf vis yash password-store tmux xdg-user-dirs todo yazi
+pkg install git doas curl wget fzf vis yash password-store tmux xdg-user-dirs todo yazi age
 
 xdg-user-dirs-update
 echo "/usr/local/bin/yash" >> /etc/shells

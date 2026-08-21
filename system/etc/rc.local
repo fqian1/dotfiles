@@ -1,4 +1,0 @@
-#!/bin/sh
-(service netif start wlan0 >/dev/null 2>&1) &
-acpi_call -p '\_SB_.PCI0.LPCB.EC__.HKEY.BCCS' -i 80
-acpi_call -p '\_SB_.PCI0.LPCB.EC__.HKEY.BCSS' -i 95

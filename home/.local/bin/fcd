@@ -1,0 +1,4 @@
+#!/bin/sh
+
+dir=$(find "${1:-.}" -type d ! -path '*/.git*' | fzf)
+[ -n "$dir" ] && cd "$dir"
