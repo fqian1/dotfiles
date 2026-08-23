@@ -2,6 +2,18 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# automatically install ble.sh
+__blesh_dir="$HOME/.local/share/blesh"
+if [[ ! -d "$__blesh_dir" ]]; then
+    echo "Installing ble.sh nightly..."
+    curl -sL https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz | tar -xJf - -C /tmp
+    mkdir -p "$(dirname "$__blesh_dir")"
+    mv /tmp/ble-nightly "$__blesh_dir"
+fi
+
+[[ $- == *i* ]] && source -- "$__blesh_dir" --attach=none
+# .bashrc contents here:
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -11,6 +23,8 @@ esac
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
+
+bind 'set keyseq-timeout 1'
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -40,12 +54,5 @@ if [ -f $HOME/.shrc ]; then
 	. $HOME/.shrc
 fi
 
-# automatically install ble.sh
-__blesh_dir="$HOME/.local/share/blesh"
-if [[ ! -d "$__blesh_dir" ]]; then
-    echo "Installing ble.sh nightly..."
-    curl -sL https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz | tar -xJf - -C /tmp
-    mkdir -p "$(dirname "$__blesh_dir")"
-    mv /tmp/ble-nightly "$__blesh_dir"
-fi
-[[ -f "$__blesh_dir/ble.sh" ]] && source "$__blesh_dir/ble.sh"
+# Keep this line at the end
+[[ ! ${BLE_VERSION-} ]] || ble-attach

@@ -1,7 +1,7 @@
 HOME_SRC   := $(shell find home -type f)
 SYSTEM_SRC := $(shell find system -type f)
 
-HOME_EXCEPTIONS   :=
+HOME_EXCEPTIONS   := home/%.age
 SYSTEM_EXCEPTIONS := system/etc/doas.conf
 
 HOME_OBJS_GENERIC   := $(patsubst home/%,$(HOME)/%,$(filter-out $(HOME_EXCEPTIONS),$(HOME_SRC)))
@@ -14,6 +14,7 @@ SYSTEM_OBJS := $(SYSTEM_OBJS_GENERIC)
 all: home system
 
 home: $(HOME_OBJS)
+	@mv $(HOME)/.bash_profile $(HOME)/.bash_profile.bak
 	@echo "==> Home dotfiles installed"
 
 system: require-root $(SYSTEM_OBJS)
@@ -45,3 +46,19 @@ $(HOME)/.ssh/id_github: $(CURDIR)/home/.ssh/id_github.age
 	cp $< $@
 	chmod 0400 $@
 	chown root:wheel $@
+
+/etc/sv/%: $(CURDIR)/system/etc/sv/%
+	@mkdir -p $(@D)
+	@mkdir -p /var/service
+	cp $< $@
+	chmod 0755 $@
+	chown root:wheel $@
+	ln -sf $(@D) /var/service
+
+/etc/sv/kmscon/run: $(CURDIR)/system/etc/sv/kmscon/run
+	@mkdir -p $(@D)
+	unlink /var/service/agetty-tty1
+	cp $< $@
+	chmod 0755 $@
+	chown root:wheel $@
+	ln -sf $(@D) /var/service

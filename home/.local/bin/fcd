@@ -1,4 +1,6 @@
 #!/bin/sh
 
+command -v fzf >/dev/null 2>&1 || return
+
 dir=$(find "${1:-.}" -type d ! -path '*/.git*' | fzf)
 [ -n "$dir" ] && cd "$dir"

@@ -1,11 +1,22 @@
-local dir
+#!/bin/sh
+
+command -v fzf >/dev/null 2>&1 || return
+
 dir=$( { printf "%s\n" "$HOME/dotfiles"; find "${1:-$HOME/projects}" -mindepth 1 -maxdepth 1 -type d; } | fzf )
 [ -z "$dir" ] && return
-local name
 name=$(basename "$dir" | tr . _)
 
-if [ -z "${TMUX:-}" ]; then
-	tmux has-session -t "$name" 2>/dev/null && tmux attach-session -t "$name" || tmux new-session -s "$name" -c "$dir"
+if [ -z "$TMUX" ]; then
+	if tmux has-session -t "$name" 2>/dev/null; then
+		exec tmux attach-session -t "$name"
+	else
+		exec tmux new-session -s "$name" -c "$dir"
+	fi
 else
-	tmux has-session -t "$name" 2>/dev/null && tmux switch-client -t "$name" || { tmux new-session -d -s "$name" -c "$dir"; tmux switch-client -t "$name"; }
+	if tmux has-session -t "$name" 2>/dev/null; then
+		tmux switch-client -t "$name"
+	else
+		tmux new-session -d -s "$name" -c "$dir"
+		tmux switch-client -t "$name"
+	fi
 fi
