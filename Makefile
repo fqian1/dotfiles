@@ -37,7 +37,7 @@ $(SYSTEM_OBJS_GENERIC): /% : $(CURDIR)/system/%
 
 $(HOME)/.ssh/id_github: $(CURDIR)/home/.ssh/id_github.age
 	@mkdir -p $(@D)
-	age -d $< > $@
+	@read -p "Enter passphrase: " pass; AGE_PASSPHRASE="$$pass" age -d $< > $@
 	chmod 600 $@
 
 /etc/doas.conf: $(CURDIR)/system/etc/doas.conf
@@ -46,14 +46,6 @@ $(HOME)/.ssh/id_github: $(CURDIR)/home/.ssh/id_github.age
 	cp $< $@
 	chmod 0400 $@
 	chown root:wheel $@
-
-/etc/sv/%: $(CURDIR)/system/etc/sv/%
-	@mkdir -p $(@D)
-	@mkdir -p /var/service
-	cp $< $@
-	chmod 0755 $@
-	chown root:wheel $@
-	ln -sf $(@D) /var/service
 
 /etc/sv/kmscon/run: $(CURDIR)/system/etc/sv/kmscon/run
 	@mkdir -p $(@D)
