@@ -1416,7 +1416,7 @@ blehook/eval-after-load keymap_vi blerc/vim-load-hook
 
 ## This option specifies a colon-separated list of custom search paths of "ble-import".
 
-#bleopt import_path="${XDG_DATA_HOME:-$HOME/.local/share}/blesh/local"
+bleopt import_path="${XDG_DATA_HOME:-$HOME/.local/share}/blesh/local"
 
 
 ## When a non-empty value is specified to this option, displays the internal

@@ -6,7 +6,8 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 xbps-install -Syu
-xbps-install -y curl wget fzf vim pass tmux xdg-user-dirs yazi age nerd-fonts kmscon fontconfig opendoas
+xbps-install -y curl wget fzf vim pass tmux xdg-user-dirs yazi age nerd-fonts kmscon fontconfig opendoas \
+	void-repo-nonfree intel-ucode tlp dbus linux linux-firmware-intel pipewire mpv gcc shellcheck make xz fastfetch
 xbps-reconfigure -fa
 
 echo "\n\n"

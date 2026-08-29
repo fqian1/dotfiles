@@ -1,28 +1,32 @@
 ```
-.
-├── Makefile
-├── home
-│   ├── .config
-│   │   ├── git
+./
+├── README.md
+├── home/
+│   ├── .bashrc
+│   ├── .config/
+│   │   ├── blesh/
+│   │   │   └── init.sh
+│   │   ├── git/
 │   │   │   └── config
-│   │   ├── tmux
-│   │   │   └── tmux.conf
-│   │   ├── user-dirs.dirs
-│   │   └── yash
-│   │       └── rc
-│   ├── .login_conf
+│   │   ├── mango/
+│   │   │   └── config.conf
+│   │   └── tmux/
+│   │       └── tmux.conf
+│   ├── .local/
+│   │   └── bin/
+│   │       ├── fcd*
+│   │       ├── fedit*
+│   │       ├── ftmux*
+│   │       ├── max-refresh*
+│   │       └── test-colours*
 │   ├── .profile
 │   ├── .shrc
-│   └── .ssh
-└── system
-    ├── etc
-    │   └── rc.conf
-    └── usr
-        ├── local
-        │   └── etc
-        │       └── doas.conf
-        └── share
-            └── vt
-                └── keymaps
-                    └── my.kbd
+│   └── .ssh/
+│       ├── id_github.age
+│       └── id_github.pub
+├── install.sh*
+├── misc/
+│   └── kernel/
+│       └── defconfig
+└── Makefile
 ```
