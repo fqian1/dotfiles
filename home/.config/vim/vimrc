@@ -1,0 +1,206 @@
+set number
+set rnu
+set copyindent
+set smartcase
+set shiftwidth=4
+set tabstop=4
+set autocomplete
+set cmdheight=1
+" treat hyphens as part of a word
+set iskeyword+=-
+" glob searching in dirs
+set path+=**
+set autoread
+set wildmode=list,longest,noinsert
+set wildignore+=*.o,*.obj,*.pyc,*.so,*.dll,*.git/
+set scrolloff=6
+set sidescrolloff=8
+set diffopt+=linematch:60
+" let undodir = expand('~/.vim/undodir')
+set cursorline
+highlight CursorLine cterm=NONE ctermbg=237
+highlight CursorLineNr cterm=NONE ctermbg=237
+set showmatch
+set matchtime=1
+set breakindent
+set list
+set listchars=tab:\\u2502\ ,trail:·,extends:→,precedes:←,trail:$
+set linebreak
+set wrap
+set showbreak=↪\\
+set signcolumn=yes
+set laststatus=1
+set splitright
+set foldmethod=indent
+set foldenable
+set foldlevelstart=9
+set foldopen-=search
+syntax on
+set conceallevel=2
+set concealcursor=nc
+set lazyredraw
+set synmaxcol=300
+set softtabstop=4
+set autoindent
+set smartindent
+set shiftround
+set incsearch
+set hlsearch
+set timeoutlen=500
+set ttimeoutlen=0
+set whichwrap=
+set wildignorecase
+set completeopt=menu,fuzzy,popup,longest
+set completepopup=
+set shortmess+=c
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+set updatetime=100
+set redrawtime=10000
+set maxmempattern=20000
+set visualbell
+set virtualedit=block
+set cpoptions+=$
+
+filetype plugin indent on
+
+hi Normal           ctermfg=NONE ctermbg=NONE
+hi CursorLine       ctermbg=Cyan    cterm=NONE
+hi Visual           ctermbg=Yellow
+hi Directory        ctermfg=Cyan
+hi MsgArea          ctermbg=NONE
+hi NonText          ctermfg=8
+hi Folded           ctermfg=7    ctermbg=0
+hi Title            ctermfg=4    cterm=bold
+hi Comment          ctermfg=7    cterm=italic
+hi Constant         ctermfg=11
+hi String           ctermfg=2
+hi Identifier       ctermfg=1
+hi Function         ctermfg=4
+hi Statement        ctermfg=5
+hi PreProc          ctermfg=13
+hi Type             ctermfg=3
+hi Special          ctermfg=6
+hi Underlined       cterm=underline
+hi Error            ctermfg=1    cterm=bold
+hi Todo             ctermfg=NONE    ctermbg=Yellow    cterm=reverse
+hi LineNr           ctermfg=7    ctermbg=NONE
+hi CursorLineNr     ctermfg=11   cterm=bold
+hi SignColumn       ctermbg=NONE
+hi VertSplit        ctermfg=0    ctermbg=NONE
+hi StatusLine       ctermfg=NONE ctermbg=0    cterm=NONE
+hi StatusLineNC     ctermfg=8    ctermbg=NONE
+hi Search           ctermfg=0    ctermbg=3
+hi IncSearch        ctermfg=0    ctermbg=11
+hi MatchParen       ctermfg=15   ctermbg=12   cterm=bold
+hi Pmenu            ctermfg=15   ctermbg=0
+hi PmenuSel         ctermfg=15   ctermbg=12
+hi WildMenu         ctermfg=0    ctermbg=4
+hi DiffAdd          ctermfg=Green    ctermbg=NONE
+hi DiffChange       ctermfg=Yellow    ctermbg=NONE
+hi DiffDelete       ctermfg=Red    ctermbg=NONE
+hi DiffText         ctermfg=Grey    ctermbg=NONE
+
+" KEYBINDS
+
+let mapleader = " "
+
+" Set marks using leader + shift + number
+nnoremap <leader>! mA
+nnoremap <leader>" mB
+nnoremap <leader>£ mC
+nnoremap <leader>$ mD
+nnoremap <leader>% mE
+nnoremap <leader>^ mF
+nnoremap <leader>& mG
+nnoremap <leader>* mH
+nnoremap <leader>) mI
+nnoremap <leader>_ mJ
+
+" Jump to marks
+nnoremap <leader>1 'A`"zz
+nnoremap <leader>2 'B`"zz
+nnoremap <leader>3 'C`"zz
+nnoremap <leader>4 'D`"zz
+nnoremap <leader>5 'E`"zz
+nnoremap <leader>6 'F`"zz
+nnoremap <leader>7 'G`"zz
+nnoremap <leader>8 'H`"zz
+nnoremap <leader>9 'I`"zz
+nnoremap <leader>0 'J`"zz
+
+" Move visual blocks
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Keep cursor in place when joining lines
+nnoremap J mzJ`z
+
+" Keep cursor centered during scrolling and searching
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzz
+nnoremap N Nzz
+
+" Paste over selection without losing current register
+xnoremap <leader>p "_dP
+
+" Delete to void register (black hole)
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
+" Disable annoying keys
+nnoremap q: <Nop>
+
+nnoremap <Esc> :nohlsearch <CR>
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <c-k> <c-w>k
+nnoremap <C-j> <C-w>j
+
+nnoremap j gj
+nnoremap k gk
+
+" Stay in visual mode after indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" Supertab
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <expr> <Esc> pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
+
+" Plugins
+set runtimepath^=$XDG_DATA_HOME/vim
+
+let data_dir = empty($XDG_DATA_HOME) ? '~/.local/share/vim' : $XDG_DATA_HOME . '/vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+
+call plug#begin()
+
+if has('nvim') || has('patch-8.0.902')
+	Plug 'mhinz/vim-signify'
+else
+	Plug 'mhinz/vim-signify', { 'tag': 'legacy' }
+endif
+
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
+
+if has('nvim') || has('patch-8.2.000')
+	Plug 'dense-analysis/ale'
+endif
+
+Plug 'junegunn/fzf.vim'
+
+call plug#end()
+
+let g:signify_sign_add = '+'
+let g:signify_sign_delete = '-'
+let g:signify_sign_change = '~'

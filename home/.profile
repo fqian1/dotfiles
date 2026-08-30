@@ -13,8 +13,8 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin:$HOM
 # serial line.
 # TERM=xterm; 	export TERM
 
-EDITOR=vim;   	export EDITOR
-PAGER=less;  	export PAGER
+EDITOR=vim;  export EDITOR
+PAGER=less;  export PAGER
 
 # set ENV to a file invoked each time sh is started for interactive use.
 ENV=$HOME/.shrc; export ENV
