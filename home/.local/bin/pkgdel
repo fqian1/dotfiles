@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ "$(id -u)" -ne 0 ]; then
+	echo "Must be run as super user"
+	return 1
+fi
+
+if command -v xbps-install >/dev/null 2>&1; then
+	xbps-remove -R "$@"
+elif command -v apt >/dev/null 2>&1; then
+	apt remove "$@"
+elif command -v pkg >/dev/null 2>&1; then
+	pkg delete "$@"
+fi

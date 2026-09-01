@@ -26,7 +26,6 @@ PS1="\u@\h:\w \\$ "
 # search path for cd(1)
 CDPATH=:$HOME
 
-alias sudo='doas'
 alias tree='tree -F --dirsfirst -a -I .git'
 alias ls='ls -lFG'
 

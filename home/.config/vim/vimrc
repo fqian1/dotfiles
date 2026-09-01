@@ -18,8 +18,6 @@ set sidescrolloff=8
 set diffopt+=linematch:60
 " let undodir = expand('~/.vim/undodir')
 set cursorline
-highlight CursorLine cterm=NONE ctermbg=237
-highlight CursorLineNr cterm=NONE ctermbg=237
 set showmatch
 set matchtime=1
 set breakindent
@@ -52,7 +50,7 @@ set whichwrap=
 set wildignorecase
 set completeopt=menu,fuzzy,popup,longest
 set completepopup=
-set shortmess+=c
+set shortmess+=co
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 set updatetime=100
@@ -61,45 +59,86 @@ set maxmempattern=20000
 set visualbell
 set virtualedit=block
 set cpoptions+=$
+set spelllang=en_gb
 
 filetype plugin indent on
 
-hi Normal           ctermfg=NONE ctermbg=NONE
-hi CursorLine       ctermbg=Cyan    cterm=NONE
-hi Visual           ctermbg=Yellow
-hi Directory        ctermfg=Cyan
-hi MsgArea          ctermbg=NONE
-hi NonText          ctermfg=8
-hi Folded           ctermfg=7    ctermbg=0
-hi Title            ctermfg=4    cterm=bold
-hi Comment          ctermfg=7    cterm=italic
-hi Constant         ctermfg=11
-hi String           ctermfg=2
-hi Identifier       ctermfg=1
-hi Function         ctermfg=4
-hi Statement        ctermfg=5
-hi PreProc          ctermfg=13
-hi Type             ctermfg=3
-hi Special          ctermfg=6
-hi Underlined       cterm=underline
-hi Error            ctermfg=1    cterm=bold
-hi Todo             ctermfg=NONE    ctermbg=Yellow    cterm=reverse
-hi LineNr           ctermfg=7    ctermbg=NONE
-hi CursorLineNr     ctermfg=11   cterm=bold
-hi SignColumn       ctermbg=NONE
-hi VertSplit        ctermfg=0    ctermbg=NONE
-hi StatusLine       ctermfg=NONE ctermbg=0    cterm=NONE
-hi StatusLineNC     ctermfg=8    ctermbg=NONE
-hi Search           ctermfg=0    ctermbg=3
-hi IncSearch        ctermfg=0    ctermbg=11
-hi MatchParen       ctermfg=15   ctermbg=12   cterm=bold
-hi Pmenu            ctermfg=15   ctermbg=0
-hi PmenuSel         ctermfg=15   ctermbg=12
-hi WildMenu         ctermfg=0    ctermbg=4
-hi DiffAdd          ctermfg=Green    ctermbg=NONE
-hi DiffChange       ctermfg=Yellow    ctermbg=NONE
-hi DiffDelete       ctermfg=Red    ctermbg=NONE
-hi DiffText         ctermfg=Grey    ctermbg=NONE
+" Black DarkGrey LightGrey White
+
+let PureBlack = 16
+
+hi SpecialKey      ctermfg=DarkYellow
+hi NonText         ctermfg=DarkGrey
+hi Directory       ctermfg=DarkCyan
+hi ErrorMsg        ctermfg=White ctermbg=DarkRed
+hi IncSearch       cterm=reverse ctermfg=Black ctermbg=Yellow
+hi Search          ctermfg=Black ctermbg=DarkYellow
+hi MoreMsg         ctermfg=DarkGreen
+hi ModeMsg         cterm=bold
+hi LineNr          ctermfg=LightGrey ctermbg=NONE
+hi LineNrAbove    ctermfg=NONE ctermbg=NONE cterm=NONE
+hi LineNrBelow    ctermfg=NONE ctermbg=NONE cterm=NONE
+hi CursorLineNr    cterm=bold ctermfg=LightGrey ctermbg=NONE
+hi Question        ctermfg=DarkGreen
+hi StatusLine      ctermbg=Black
+hi StatusLineNC    cterm=reverse ctermfg=DarkGrey
+hi VertSplit       cterm=reverse ctermfg=Black
+hi Title           cterm=bold ctermfg=DarkBlue
+hi Visual         ctermfg=Black ctermbg=Yellow
+hi VisualNOS       cterm=bold,underline
+hi WarningMsg      ctermfg=DarkRed
+hi WildMenu        ctermfg=Black ctermbg=DarkBlue
+hi Folded          ctermfg=LightGrey ctermbg=Black
+hi FoldColumn      ctermfg=DarkBlue ctermbg=Black
+hi DiffAdd         ctermfg=Green ctermbg=NONE
+hi DiffChange      ctermfg=Yellow ctermbg=NONE
+hi DiffDelete      ctermfg=Red ctermbg=NONE
+hi DiffText        cterm=bold ctermfg=248
+hi SignColumn      ctermfg=DarkBlue ctermbg=NONE
+hi Conceal        ctermfg=LightGrey ctermbg=242
+hi SpellBad        ctermbg=224
+hi SpellCap        ctermbg=DarkYellow
+hi SpellRare       ctermbg=225
+hi SpellLocal      ctermbg=Cyan
+hi Pmenu          ctermfg=White ctermbg=Black
+hi PmenuSel       ctermfg=White ctermbg=Blue
+hi PmenuSbar      ctermbg=Black
+hi PmenuThumb     ctermbg=DarkGrey
+hi PmenuShadow    ctermfg=DarkGrey ctermbg=Black
+hi TabLine         cterm=underline ctermfg=Black ctermbg=LightGrey
+hi TabLineSel      cterm=bold
+hi TabLineFill     cterm=reverse
+hi CursorColumn    ctermbg=Black
+hi CursorLine      ctermbg=234 cterm=NONE
+hi ColorColumn     ctermbg=234
+hi StatusLineTerm  cterm=bold ctermfg=White ctermbg=DarkGreen
+hi StatusLineTermNC  ctermfg=White ctermbg=DarkGreen
+hi MsgArea        ctermfg=LightGrey ctermbg=NONE cterm=NONE
+hi ComplMatchIns  ctermfg=LightBlue ctermbg=NONE cterm=NONE
+hi Added          ctermfg=DarkGreen
+hi Normal         ctermfg=NONE ctermbg=NONE cterm=NONE
+hi MatchParen      cterm=bold ctermfg=White ctermbg=Blue
+hi ToolbarLine     ctermbg=NONE
+hi ToolbarButton  cterm=bold ctermfg=White ctermbg=242
+hi Comment         ctermfg=LightGrey ctermbg=NONE
+hi Constant        ctermfg=DarkYellow
+hi Special         ctermfg=DarkCyan
+hi Identifier      ctermfg=DarkRed
+hi Statement       ctermfg=DarkMagenta
+hi PreProc         ctermfg=DarkMagenta
+hi Type            ctermfg=DarkYellow
+hi Underlined      cterm=underline ctermfg=DarkMagenta
+hi Ignore         ctermfg=White
+hi Changed        ctermfg=Blue
+hi Removed        ctermfg=Red
+hi Error           cterm=bold ctermfg=White ctermbg=Red
+hi Todo            cterm=reverse ctermfg=Yellow ctermbg=NONE
+hi Bold            cterm=bold
+hi Italic          cterm=italic
+hi BoldItalic      cterm=bold,italic
+hi String         ctermfg=DarkGreen ctermbg=NONE
+hi Function       ctermfg=DarkBlue ctermbg=NONE
+hi PmenuBorder       ctermfg=234 ctermbg=234
 
 " KEYBINDS
 
@@ -149,8 +188,7 @@ xnoremap <leader>p "_dP
 nnoremap <leader>d "_d
 vnoremap <leader>d "_d
 
-" Disable annoying keys
-nnoremap q: <Nop>
+nnoremap <leader>i :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<CR>
 
 nnoremap <Esc> :nohlsearch <CR>
 
@@ -184,23 +222,30 @@ endif
 
 call plug#begin()
 
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
+Plug 'junegunn/fzf.vim'
+Plug 'vimpostor/vim-tpipeline'
+
 if has('nvim') || has('patch-8.0.902')
 	Plug 'mhinz/vim-signify'
 else
 	Plug 'mhinz/vim-signify', { 'tag': 'legacy' }
 endif
 
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-vinegar'
-
 if has('nvim') || has('patch-8.2.000')
 	Plug 'dense-analysis/ale'
 endif
-
-Plug 'junegunn/fzf.vim'
 
 call plug#end()
 
 let g:signify_sign_add = '+'
 let g:signify_sign_delete = '-'
 let g:signify_sign_change = '~'
+
+nnoremap <leader>f :Files<CR>
+
+let g:fzf_vim = {}
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 1.0 } }
+let g:fzf_colors = { 'border': [ 'fg', 'PmenuBorder', 'bg', 'PmenuBorder' ] }
+

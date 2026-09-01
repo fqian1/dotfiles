@@ -21,37 +21,9 @@
 ##-----------------------------------------------------------------------------
 ## Basic settings
 
-
-## The following setting specifies the input encoding. Currently only "UTF-8"
-## and "C" is available.
-
 bleopt input_encoding=UTF-8
-
-
-## The following setting specifies the pager used by ble.sh.  This is used to
-## show the help of commands (f1).
-
 bleopt pager=less
-
-## The following setting specifies the editor used by ble.sh.  This is used for
-## the widget edit-and-execute (C-x C-e) and editor for a large amount of
-## command line texts.  Possible values include, for example, "vim", "emacs
-## -nw" and "nano".
-
 bleopt editor=vim
-
-
-## The following settings sets the behavior of visible bells (vbell).  The
-## option "vbell_duration" sets the time duration to show the vbell.  The
-## option "vbell_align" controls the position of vbell with a colon-separated
-## fields. The fields "left", "center", and "right" specify that the vbell
-## should be shown up on the left, center, and right, respectively, in the
-## terminal display.  The default is "right".  The field "panel" specify that
-## vbell should be shown below the command line within the line editor
-## interface (as far as the line editor is currently active).  The faces
-## "vbell", "vbell_erase", and "vbell_flash" specify the graphic style of the
-## vbell, the one after vbell is erased, and the one used to blink the vbell,
-## respectively.
 
 #bleopt vbell_default_message=' Wuff, -- Wuff!! '
 #bleopt vbell_duration=2000
@@ -60,81 +32,17 @@ bleopt editor=vim
 #ble-face vbell_erase='bg=252'
 #ble-face vbell_flash='fg=green,reverse'
 
-
 ##-----------------------------------------------------------------------------
 ## Line editor settings
 
-
-## This option controls the behavior of the bell in the line editing by
-## colon-separated values.  When "abell", "vbell", and "visual" are contained,
-## the audible bells, the visible bells, and the visual bells are enabled.  The
-## audible bell sends BEL to the terminal.  The visible bell shows the message
-## on the terminal display.  The visual bell is the GNU-Screen style bell that
-## flashes the terminal display by turning on DECSCNM in a short moment.  Old
-## settings "edit_vbell" and "edit_abell" should be updated to use "edit_bell".
-
-#bleopt edit_bell=abell
-
-
-## The following setting turns on the delayed load of history when an non-empty
-## value is set.
-
+bleopt edit_bell=abell
 #bleopt history_lazyload=1
-
-
-## The following setting turns on the delete selection mode when an non-empty
-## value is set. When the mode is turned on the selection is removed when a
-## user inserts a character.
-
 bleopt delete_selection_mode=1
-
-
-## The following settings control the indentation. "indent_offset" sets the
-## indent width. "indent_tabs" controls if tabs can be used for indentation or
-## not. If "indent_tabs" is set to 0, tabs will never be used. Otherwise
-## indentation is made with tabs and spaces.
-
 bleopt indent_offset=4
 bleopt indent_tabs=1
-
-
-## "undo_point" controls the cursor position after "undo".  When "beg" and
-## "end" are specified, the cursor will be moved to the beginning and the end,
-## respectively, of the dirty section.  When "first" and "last" are specified,
-## the cursor position will be the first and last positions, respectively, for
-## which the resulting line content is recorded.  When "near" is specified, it
-## behaves like "last" for undo and "first" for redo.  Otherwise, it behaves
-## like "beg" for vi command modes and "near" for the other modes.  The default
-## is "auto".
-
 bleopt undo_point=beg
-
-
-## The following setting controls forced layout calculations before graphical
-## operations. When a non-empty value is specified, the forced calculations are
-## enabled. When an empty string is set, the operations are switched to logical
-## ones.
-
-bleopt edit_forced_textmap=1
-
-
-## The following option controls the interpretation of lines when going to the
-## beginning or the end of the current line.  When the value `logical` is
-## specified, the logical line is used, i.e., the beginning and the end of the
-## line is determined based on the newline characters in the edited text.  When
-## the value `graphical` is specified, the graphical line is used, i.e., the
-## beginning and the end of the displayed line in the terminal is used.
-
+bleopt edit_forced_textmap=
 bleopt edit_line_type=graphical
-
-
-## The following option specifies the set of expansions performed by
-## magic-space with a colon-separated list of expansion types. "history",
-## "sabbrev", "alias", and "autocd" can be specified.  In addition, a
-## user-defined expansion can be defined as a shell function
-## "ble/complete/expand:<name>" so that "<name>" can be specified to this
-## option.
-
 bleopt edit_magic_expand=history:sabbrev:alias
 
 
@@ -163,14 +71,7 @@ bleopt edit_magic_expand=history:sabbrev:alias
 
 #bleopt edit_magic_accept=sabbrev
 
-
-## The following option controls the position of the info pane where completion
-## menu, mode names, and other information are shown.  When the value "top" is
-## specified, the info pane is shown just below the command line.  When the
-## value "bottom" is specified, the info pane is shown at the bottom of the
-## terminal.  The default is "top".
-
-bleopt info_display=top
+bleopt info_display=bottom
 
 
 ## The following settings controls the prompt after the cursor left the command
@@ -194,7 +95,7 @@ bleopt info_display=top
 ## "prompt_rps1_final" if it has a non-empty value, or otherwise, the right
 ## prompt vanishes if "prompt_rps1_transient" is set to a non-empty value,
 
-#bleopt prompt_rps1='\w'
+bleopt prompt_rps1='\w'
 #bleopt prompt_rps1_final=
 #bleopt prompt_rps1_transient=''
 

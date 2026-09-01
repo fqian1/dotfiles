@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -- $(free -L)
+
+printf "%d\n" $(( $6 * 100 / $8 ))
