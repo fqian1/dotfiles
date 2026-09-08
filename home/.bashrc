@@ -11,7 +11,7 @@ if [[ ! -d "$__blesh_dir" ]]; then
     mv /tmp/ble-nightly "$__blesh_dir"
 fi
 
-[[ $- == *i* ]] && source -- "$__blesh_dir" --attach=none
+[[ $- == *i* ]] && source -- "$__blesh_dir"/ble.sh --attach=none
 # .bashrc contents here:
 
 # If not running interactively, don't do anything

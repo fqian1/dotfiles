@@ -42,12 +42,6 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-$(id -u)}"
 
 export GITHUB_USERNAME="fqian1"
 
-if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/user-dirs.dirs" ]; then
-    . "${XDG_CONFIG_HOME:-$HOME/.config}/user-dirs.dirs"
-    export XDG_DESKTOP_DIR XDG_DOWNLOAD_DIR XDG_TEMPLATES_DIR XDG_PUBLICSHARE_DIR XDG_DOCUMENTS_DIR XDG_MUSIC_DIR XDG_PICTURES_DIR XDG_VIDEOS_DIR
-fi
+command -v xdg-user-dirs-update >/dev/null 2>/dev/null && xdg-user-dirs-update
 
-xdg-user-dirs-update
-
-clear
 fastfetch
