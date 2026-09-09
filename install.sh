@@ -17,6 +17,6 @@ sudo -u "$SUDO_USER" xdg-user-dirs-update
 fc-cache -fv
 
 if [ ! -f /etc/doas.conf ]; then
-	echo "permit persist :wheel as root" | tee /etc/doas.conf
+	echo "permit persist keepenv :wheel as root" | tee /etc/doas.conf
 	chmod 400 /etc/doas.conf
 fi

@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+command -v btrfs >/dev/null 2>&1 || return
+
+DATE=$(date +%Y-%m-%d_%H:%M)
+SNAP_DIR="${1:-/.snapshots}"
+
+btrfs subvolume snapshot -r / "$SNAP_DIR"/@root_"$DATE"
