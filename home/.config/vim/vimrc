@@ -244,3 +244,10 @@ let g:fzf_vim = {}
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 1.0 } }
 let g:fzf_colors = { 'border': [ 'fg', 'PmenuBorder', 'bg', 'PmenuBorder' ] }
 
+function! ToggleALELSP()
+	let g:ale_disable_lsp = !get(g:, 'ale_disable_lsp', 0)
+	call ale#toggle#Toggle()
+	echom "ALE LSP " . (g:ale_disable_lsp ? "Disabled" : "Enabled")
+endfunction
+
+nnoremap <leader>l :call ToggleALELSP()<CR>
