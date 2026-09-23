@@ -1,9 +1,9 @@
 #!/bin/sh
 
-command -v fzf >/dev/null 2>&1 || return
+command -v fzf >/dev/null 2>&1 || exit
 
 dir=$( { printf "%s\n" "$HOME/dotfiles"; find "${1:-$HOME/projects}" -mindepth 1 -maxdepth 1 -type d; } | fzf )
-[ -z "$dir" ] && return
+[ -z "$dir" ] && exit
 name=$(basename "$dir" | tr . _)
 
 if [ -z "$TMUX" ]; then

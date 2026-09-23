@@ -4,25 +4,25 @@ set copyindent
 set smartcase
 set shiftwidth=4
 set tabstop=4
-set autocomplete
+"  set autocomplete
 set cmdheight=1
 " treat hyphens as part of a word
 set iskeyword+=-
 " glob searching in dirs
 set path+=**
 set autoread
-set wildmode=list,longest,noinsert
+" set wildmode=list,longest,noinsert
 set wildignore+=*.o,*.obj,*.pyc,*.so,*.dll,*.git/
 set scrolloff=6
 set sidescrolloff=8
-set diffopt+=linematch:60
+" set diffopt+=linematch:60
 " let undodir = expand('~/.vim/undodir')
 set cursorline
 set showmatch
 set matchtime=1
 set breakindent
 set list
-set listchars=tab:\\u2502\ ,trail:·,extends:→,precedes:←,trail:$
+let &listchars = 'tab:' . "\u2502" . ' '
 set linebreak
 set wrap
 set showbreak=↪\\
@@ -48,7 +48,7 @@ set timeoutlen=500
 set ttimeoutlen=0
 set whichwrap=
 set wildignorecase
-set completeopt=menu,fuzzy,popup,longest
+set completeopt=menu,popup,longest
 set completepopup=
 set shortmess+=co
 let g:netrw_banner = 0
@@ -221,6 +221,8 @@ call plug#begin()
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
 Plug 'junegunn/fzf.vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'dense-analysis/ale', { 'tag': 'v3.3.0' }
 
 if has('nvim') || has('patch-8.0.902')
 	Plug 'mhinz/vim-signify'
@@ -228,9 +230,6 @@ else
 	Plug 'mhinz/vim-signify', { 'tag': 'legacy' }
 endif
 
-if has('nvim') || has('patch-8.2.000')
-	Plug 'dense-analysis/ale'
-endif
 
 call plug#end()
 
@@ -243,6 +242,7 @@ nnoremap <leader>f :Files<CR>
 let g:fzf_vim = {}
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 1.0 } }
 let g:fzf_colors = { 'border': [ 'fg', 'PmenuBorder', 'bg', 'PmenuBorder' ] }
+let g:ale_linters = { 'c': ['cpp-linter'], 'cpp': ['cpp-linter'] }
 
 function! ToggleALELSP()
 	let g:ale_disable_lsp = !get(g:, 'ale_disable_lsp', 0)
@@ -251,3 +251,4 @@ function! ToggleALELSP()
 endfunction
 
 nnoremap <leader>l :call ToggleALELSP()<CR>
+nnoremap <leader>= :ALELint<CR>

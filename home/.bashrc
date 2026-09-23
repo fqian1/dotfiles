@@ -55,4 +55,4 @@ if [ -f $HOME/.shrc ]; then
 fi
 
 # Keep this line at the end
-[[ ! ${BLE_VERSION-} ]] || ble-attach
+# [[ ! ${BLE_VERSION-} ]] || ble-attach

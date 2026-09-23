@@ -6,7 +6,7 @@
 
 # These are normally set through /etc/login.conf.  You may override them here
 # if wanted.
-PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin:$HOME/.local/bin; export PATH
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin; export PATH
 
 EDITOR=vim;  export EDITOR
 PAGER=less;  export PAGER

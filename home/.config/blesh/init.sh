@@ -69,8 +69,8 @@ bleopt prompt_ruler=            # no ruler (default)
 ## terminal and do not changes the cursor positions and skip the special
 ## treatment.
 
-#bleopt prompt_command_changes_layout=   # PRECMD/PROMPT_COMMAND not output
-bleopt prompt_command_changes_layout=1  # PRECMD/PROMPT_COMMAND may output
+bleopt prompt_command_changes_layout=   # PRECMD/PROMPT_COMMAND not output
+#bleopt prompt_command_changes_layout=1  # PRECMD/PROMPT_COMMAND may output
 
 #bleopt exec_restore_pipestatus=1  # restores PIPESTATUS (costly)
 #bleopt edit_marker=$'\e[94m[ble: %s]\e[m'
