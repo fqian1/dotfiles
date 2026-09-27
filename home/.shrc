@@ -24,9 +24,9 @@ get_ps1() {
   # sed required to use bar delimiter
   path=$(printf $PWD | sed "s|${HOME}|~|g")
   p=${path#${path%/*/*}/}
-  j=$(($(jobs -p | wc -l) - 1))
-  x=$(if [ $j -ne 0 ]; then printf "[$j]"; else printf ""; fi)
-  printf '%s@%s:%s [%s]$ ' "${USER}" "$HOSTNAME" "$p" "$x"
+  j=$(($(jobs -p | wc -l)))
+  x=$(if [ $j -ne 0 ]; then printf " [$j]"; else printf ""; fi)
+  printf '%s@%s:%s%s$ ' "${USER}" "$HOSTNAME" "$p" "$x"
 }
 
 PS1='$(get_ps1)'
