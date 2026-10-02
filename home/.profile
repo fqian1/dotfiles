@@ -41,5 +41,5 @@ chmod 700 "$XDG_RUNTIME_DIR"
 export GITHUB_USERNAME="fqian1"
 
 command -v xdg-user-dirs-update >/dev/null 2>/dev/null && xdg-user-dirs-update
-
-fastfetch
+command -v fastfetch >/dev/null 2>/dev/null && fastfetch
+. "$HOME/.cargo/env"
