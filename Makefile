@@ -1,18 +1,17 @@
-HOME_SRC := $(shell find home -type f ! -name "*.age")
-SYSTEM_SRC := $(shell find system -type f ! -name "*.age")
-HOME_SECRETS := $(shell find home -type f -name "*.age")
-SYSTEM_SECRETS := $(shell find system -type f -name "*.age")
+HOME_SRC       != find home -type f ! -name "*.age"
+SYSTEM_SRC     != find system -type f ! -name "*.age"
+HOME_SECRETS   != find home -type f -name "*.age"
+SYSTEM_SECRETS != find system -type f -name "*.age"
 
-HOME_OBJS := $(patsubst home/%,$(HOME)/%,$(HOME_SRC))
-SYSTEM_OBJS := $(patsubst system/%,/%,$(SYSTEM_SRC))
-HOME_SECRET_OBJS := $(patsubst home/%,$(HOME)/%,$(HOME_SECRETS:.age=))
-SYSTEM_SECRET_OBJS := $(patsubst system/%,/%,$(SYSTEM_SECRETS:.age=))
+HOME_OBJS = ${HOME_SRC:S|^home/|${HOME}/|}
+SYSTEM_OBJS = ${SYSTEM_SRC:S|^system/|/|}
+HOME_SECRET_OBJS = ${HOME_SECRETS:S|^home/|${HOME}/|}
+SYSTEM_SECRET_OBJS = ${SYSTEM_SECRETS:S|^system/|/|}
 
 .PHONY: all home system _system clean _clean distclean _distclean
 all: home system
 
-home: $(HOME_OBJS) $(HOME_SECRET_OBJS)
-	@[ -e "$$(HOME)"/.bash_profile ] && mv "$(HOME)"/.bash_profile "$(HOME)"/.bash_profile.bak || true
+home: ${HOME_OBJS} ${HOME_SECRET_OBJS}
 	@echo "==> Home dotfiles installed"
 
 system: 
@@ -20,25 +19,29 @@ system:
 	@doas $(MAKE) _system
 	@echo "==> System dotfiles installed"
 
-$(HOME_OBJS): $(HOME)/% : home/%
-	@mkdir -p $(@D)
-	@[ ! -e $@ -o -L $@ ] || mv $@ $@.bak
-	ln -sf $(abspath $<) $@
+_system: ${SYSTEM_OBJS} ${SYSTEM_SECRET_OBJS}
 
-$(HOME_SECRET_OBJS): $(HOME)/% : home/%.age
+require-root:
+	@[ $$(id -u) -eq 0 ] || { echo "Must be root to install system files."; exit 1; }
+
+${HOME_OBJS}: ${@:S|${HOME}/|${.CURDIR}/home/|}
+	@mkdir -p ${@:H}
+	@[ ! -e $@ ] || mv $@ $@.bak
+	ln -sf ${.CURDIR}/home/${@:S|${HOME}/||} $@
+
+${HOME_OBJS_SECRETS}: ${@:S|${HOME}/|${.CURDIR}/home/|}.age
 	@mkdir -p $(@D)
-	age -d $< > $@
+	age -d $< | tee $@ >/dev/null
 	chmod 600 $@
 
-_system: $(SYSTEM_OBJS) $(SYSTEM_SECRET_OBJS)
-
-$(SYSTEM_OBJS): /% : system/%
-	@mkdir -p $(@D)
-	cp $< $@
+${SYSTEM_OBJS}: ${.CURDIR}/system$@
+	@mkdir -p ${@:H}
+	@[ ! -e $@ ] || mv $@ $@.bak
+	cp ${.CURDIR}/system$@ $@
 	chown root:wheel $@
 	chmod 644 $@
 
-$(SYSTEM_SECRET_OBJS): /% : system/%.age
+$(SYSTEM_SECRET_OBJS): ${.CURDIR}/system$@.age
 	@mkdir -p $(@D)
 	age -d $< | tee $@ >/dev/null
 	chmod 600 $@
