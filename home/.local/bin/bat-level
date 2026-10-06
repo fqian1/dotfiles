@@ -1,5 +1,15 @@
 #!/bin/sh
 
-level=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null)
-
-printf "%s\n" "${level:-100}"
+case "$(uname -s)" in
+	Linux)
+		level=$(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null)
+		printf "%s\n" "${level:-ERR}"
+		;;
+	FreeBSD) 
+		level=$(sysctl -n hw.acpi.battery.life)
+		printf "%s\n" "${level:-ERR}"
+		;;
+	*)
+		printf "ERR"
+		;;
+esac

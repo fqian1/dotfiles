@@ -48,6 +48,8 @@ if command --identify --builtin-command bindkey >/dev/null; then
   bindkey --vi-insert '\^Y' put-left
   bindkey --vi-insert '\N' complete-next-column
   bindkey --vi-insert '\P' complete-prev-column
+  bindkey --vi-insert '\^L' clear-and-redraw-all
+  bindkey --vi-command '\^L' clear-and-redraw-all
   bindkey --vi-command '\^N' beginning-search-forward
   bindkey --vi-command '\^P' beginning-search-backward
 fi
@@ -134,24 +136,18 @@ fi
 SHLVL=$((_old_shlvl+1)) 2>/dev/null || SHLVL=1
 export SHLVL
 
-#function cwd_prompt {
-#  local dir="${PWD##*/}"
-#  local pdir_full="${PWD%/*}"
-#  local pdir="${pdir_full##*/}"
-#  local pdirt="${pdir:0:3}.."
-#  if [[ "$PWD" == "$HOME" ]]; then
-#    ble/prompt/print "~"
-#  elif [[ "$PWD" == "/" ]]; then
-#    ble/prompt/print "/"
-#  elif [[ "$pdir_full" == "$HOME" ]]; then
-#    ble/prompt/print "~/$dir" # Check if the full parent path is HOME
-#  else
-#    ble/prompt/print "$pdirt/$dir"
-#  fi
-#}
+get_ps1() {
+  # sed required to use bar delimiter
+  path=$(printf $PWD | sed "s|${HOME}|~|g")
+  p=${path#${path%/*/*}/}
+  j=$(($(jobs -p | wc -l)))
+  x=$(if [ $j -ne 0 ]; then printf " [$j]"; else printf ""; fi)
+  printf '%s@%s:%s%s$ ' "${USER}" "$HOSTNAME" "$p" "$x"
+}
 
 YASH_PS1=$_uc'${LOGNAME}'$_hc'@${HOSTNAME%%.*}\fd. '\
 '${${${PWD:/~/\~}##*/}:-$PWD} ${{?:/0/}:+\\fr.$?\\fd. }${{SHLVL-0}:/1}\$ '
+YASH_PS1='$(get_ps1)'
 YASH_PS1R='\fc.${_vcs_info:-}'
 YASH_PS1S='\fo.'
 YASH_PS2=$_2c'> '
@@ -291,7 +287,6 @@ alias vim="vise"
 
 export PATH="$HOME/.local/bin:$PATH"
 
-#TODO: pwd in PS1 (print cwd, trim if long, replace $HOME with ~)
 #TODO: find git status, replace with git symbols)
 
 function handle_job_suspend() {
@@ -308,66 +303,10 @@ function handle_job_suspend() {
 alias fg='unset JOB_SUSPENDED; command fg'
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }handle_job_suspend"
 
-ftmux() {
-    dir=$( { printf "%s\n" "$HOME/dotfiles"; bfs "${1:-$HOME/projects}" -mindepth 1 -maxdepth 1 -type d; } | fzf )
-    [ -z "$dir" ] && return
-    name=$(basename "$dir" | tr . _)
+alias vi="vise"
+alias vim="vise"
 
-    if [ -z "${TMUX:-}" ]; then
-        if tmux has-session -t "$name" 2>/dev/null; then
-            tmux attach-session -t "$name"
-        else
-            tmux new-session -s "$name" -c "$dir"
-        fi
-    else
-        if tmux has-session -t "$name" 2>/dev/null; then
-            tmux switch-client -t "$name"
-        else
-            tmux new-session -d -s "$name" -c "$dir"
-            tmux switch-client -t "$name"
-        fi
-    fi
-}
-
-fedit() {
-	file=$(bfs "${1:-.}" -type f -exclude -name .git | fzf)
-	[ -n "$file" ] && vise "$file"
-}
-
-fcd() {
-	dir=$(bfs "${1:-.}" -type d -exclude -name .git | fzf)
-	[ -n "$file" ] && cd "$dir"
-}
-
-testcolours() {
-    awk 'BEGIN{
-        s="/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/";
-        s=s s s s s s s s s s s s s s s s s s s s s;
-        for (colnum = 0; colnum<77; colnum++) {
-            r = 255-(colnum*255/76);
-            g = (colnum*510/76);
-            b = (colnum*255/76);
-            if (g>255) g = 510-g;
-            printf "\033[48;2;%d;%d;%dm", r,g,b;
-            printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
-            printf "%s\033[0m", substr(s,colnum+1,1);
-        }
-        printf "\n";
-    }'
-}
-
-printcolours() {
-    RESET='\033[0m'
-
-    for i in {0..15}; do
-        # \033[48;5;%dm sets only the background
-        printf "\033[48;5;%dm  Color %02d  %b " "$i" "$i" "$RESET"
-
-        # Add a line break after the 8th color (ID 7)
-        if [ $i -eq 7 ]; then echo ""; fi
-    done
-    echo ""
-}
-
+. $HOME/.shrc
+. $HOME/.profile
 # --------------------------------------
 # vim: set et sw=2 sts=2 tw=78 ft=sh:

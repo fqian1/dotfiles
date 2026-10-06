@@ -5,8 +5,8 @@ SYSTEM_SECRETS != find system -type f -name "*.age"
 
 HOME_OBJS = ${HOME_SRC:S|^home/|${HOME}/|}
 SYSTEM_OBJS = ${SYSTEM_SRC:S|^system/|/|}
-HOME_SECRET_OBJS = ${HOME_SECRETS:S|^home/|${HOME}/|}
-SYSTEM_SECRET_OBJS = ${SYSTEM_SECRETS:S|^system/|/|}
+HOME_SECRET_OBJS = ${HOME_SECRETS:S|^home/|${HOME}/|:S|.age||}
+SYSTEM_SECRET_OBJS = ${SYSTEM_SECRETS:S|^system/|/|:S|.age||}
 
 .PHONY: all home system _system clean _clean distclean _distclean
 all: home system
@@ -29,9 +29,9 @@ ${HOME_OBJS}: ${@:S|${HOME}/|${.CURDIR}/home/|}
 	@[ ! -e $@ ] || mv $@ $@.bak
 	ln -sf ${.CURDIR}/home/${@:S|${HOME}/||} $@
 
-${HOME_OBJS_SECRETS}: ${@:S|${HOME}/|${.CURDIR}/home/|}.age
+${HOME_SECRET_OBJS}: ${@:S|${HOME}/|${.CURDIR}/home/|}.age
 	@mkdir -p $(@D)
-	age -d $< | tee $@ >/dev/null
+	age -d ${.ALLSRC} | tee $@ >/dev/null
 	chmod 600 $@
 
 ${SYSTEM_OBJS}: ${.CURDIR}/system$@

@@ -1,20 +1,49 @@
 #!/bin/sh
 
-read -r cpu user nice system idle iowait irq softirq steal rest < /proc/stat
-total1=$((user + nice + system + idle + iowait + irq + softirq + steal))
-active1=$((total1 - idle - iowait))
+case "$(uname -s)" in
+	Linux)
+		read -r cpu user nice system idle iowait irq softirq steal rest < /proc/stat
+		total1=$((user + nice + system + idle + iowait + irq + softirq + steal))
+		active1=$((total1 - idle - iowait))
 
-sleep 0.3
+		sleep 0.3
 
-read -r cpu user nice system idle iowait irq softirq steal rest < /proc/stat
-total2=$((user + nice + system + idle + iowait + irq + softirq + steal))
-active2=$((total2 - idle - iowait))
+		read -r cpu user nice system idle iowait irq softirq steal rest < /proc/stat
+		total2=$((user + nice + system + idle + iowait + irq + softirq + steal))
+		active2=$((total2 - idle - iowait))
 
-delta_total=$((total2 - total1))
-delta_active=$((active2 - active1))
+		delta_total=$((total2 - total1))
+		delta_active=$((active2 - active1))
 
-if [ $delta_total -eq 0 ]; then
-	printf 0
-else
-	printf "%d\n" $((delta_active * 100 / delta_total))
-fi
+		if [ $delta_total -eq 0 ]; then
+			printf 0
+		else
+			printf "%d\n" $((delta_active * 100 / delta_total))
+		fi
+		;;
+	FreeBSD) 
+		set -- $(sysctl -n kern.cp_time)
+		user=$1; nice=$2; sys=$3; intr=$4; idle=$5; 
+		total1=$(( user + nice + sys + intr + idle ))
+		active1=$(( total1 - idle ))
+
+		sleep 0.3
+
+		set -- $(sysctl -n kern.cp_time)
+		user=$1; nice=$2; sys=$3; intr=$4; idle=$5; 
+		total2=$(( user + nice + sys + intr + idle ))
+		active2=$(( total2 - idle ))
+
+		delta_total=$(( total2 - total1 ))
+		delta_active=$(( active2 - active1 ))
+
+		if [ $delta_total -eq 0 ]; then
+			printf 0
+		else
+			printf "%d\n" $((delta_active * 100 / delta_total))
+		fi
+		;;
+	*)
+		printf "ERR"
+		;;
+esac

@@ -1,5 +1,16 @@
 #!/bin/sh
 
-set -- $(free -L)
-
-printf "%d\n" $(( $6 * 100 / ($6 + $8) ))
+case "$(uname -s)" in
+	Linux)
+		set -- $(free -L)
+		printf "%d\n" $(( $6 * 100 / ($6 + $8) ))
+		;;
+	FreeBSD) 
+		free=$(vmstat -H | awk 'NR==3 {print $5}')
+		total=$(sysctl -n hw.physmem)
+		printf "%d\n" $(( $free * 100 / $total ))
+		;;
+	*)
+		printf "ERR"
+		;;
+esac
